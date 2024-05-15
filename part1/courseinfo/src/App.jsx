@@ -30,17 +30,19 @@ function Total({ parts }) {
 }
 
 function App() {
-  const course = "Half stack application development";
-  const parts = [
-    { name: "Fundamentals of React", excercises: 10 },
-    { name: "Using props to pass data", excercises: 7 },
-    { name: "State of a component", excercises: 14 },
-  ];
+  const course = {
+    name: "Half stack application development",
+    parts: [
+      { name: "Fundamentals of React", excercises: 10 },
+      { name: "Using props to pass data", excercises: 7 },
+      { name: "State of a component", excercises: 14 },
+    ],
+  };
   return (
     <>
-      <Header course={course} />
-      <Content parts={parts} />
-      <Total parts={parts} />
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </>
   );
 }
