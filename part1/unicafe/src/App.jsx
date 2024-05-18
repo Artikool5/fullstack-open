@@ -8,12 +8,18 @@ function Statistics(props) {
   return (
     <>
       <h2>Statistics</h2>
-      <p>Good {props.good}</p>
-      <p>Neutral {props.neutral}</p>
-      <p>Bad {props.bad}</p>
-      <p>All {getAll()}</p>
-      <p>Average {getAverageFeedback() || 0}</p>
-      <p>Positive {getPositivePercentage() || 0}%</p>
+      {getAll() ? (
+        <>
+          <p>Good {props.good}</p>
+          <p>Neutral {props.neutral}</p>
+          <p>Bad {props.bad}</p>
+          <p>All {getAll()}</p>
+          <p>Average {getAverageFeedback()}</p>
+          <p>Positive {getPositivePercentage()}%</p>
+        </>
+      ) : (
+        <p>No feedback given</p>
+      )}
     </>
   );
 }
