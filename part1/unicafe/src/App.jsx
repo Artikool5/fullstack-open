@@ -2,9 +2,10 @@ import { useState } from "react";
 
 function StatisticsLine({ children, value }) {
   return (
-    <p>
-      {children} {value}
-    </p>
+    <tr>
+      <td>{children}</td>
+      <td>{value}</td>
+    </tr>
   );
 }
 
@@ -17,16 +18,20 @@ function Statistics(props) {
     <>
       <h2>Statistics</h2>
       {getAll() ? (
-        <>
-          <StatisticsLine value={props.good}>Good</StatisticsLine>
-          <StatisticsLine value={props.neutral}>Neutral</StatisticsLine>
-          <StatisticsLine value={props.bad}>Bad</StatisticsLine>
-          <StatisticsLine value={getAll()}>All</StatisticsLine>
-          <StatisticsLine value={getAverageFeedback()}>Average</StatisticsLine>
-          <StatisticsLine value={getPositivePercentage()}>
-            Positive
-          </StatisticsLine>
-        </>
+        <table>
+          <tbody>
+            <StatisticsLine value={props.good}>Good</StatisticsLine>
+            <StatisticsLine value={props.neutral}>Neutral</StatisticsLine>
+            <StatisticsLine value={props.bad}>Bad</StatisticsLine>
+            <StatisticsLine value={getAll()}>All</StatisticsLine>
+            <StatisticsLine value={getAverageFeedback()}>
+              Average
+            </StatisticsLine>
+            <StatisticsLine value={getPositivePercentage()}>
+              Positive
+            </StatisticsLine>
+          </tbody>
+        </table>
       ) : (
         <p>No feedback given</p>
       )}
