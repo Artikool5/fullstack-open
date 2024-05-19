@@ -27,16 +27,16 @@ const Anecdotes = () => {
     { text: "The only way to go fast, is to go well.", votes: 0 },
   ];
 
+  const [anecdotes, setAnecdotes] = useState(initialAnecdotes);
+  const [selectedAnecdote, setSelectedAnecdote] = useState(
+    getRandomAnecdoteId(),
+  );
+
   const getRandomAnecdoteId = () => {
     const max = anecdotes.length;
     const id = Math.floor(Math.random() * max);
     return id;
   };
-
-  const [anecdotes, setAnecdotes] = useState(initialAnecdotes);
-  const [selectedAnecdote, setSelectedAnecdote] = useState(
-    getRandomAnecdoteId(),
-  );
 
   const getNewAnecdote = () => {
     setSelectedAnecdote(getRandomAnecdoteId());
@@ -44,12 +44,17 @@ const Anecdotes = () => {
 
   const upvote = () => {
     const copy = [...anecdotes];
-    (copy[selectedAnecdote] = {
+    copy[selectedAnecdote] = {
       text: anecdotes[selectedAnecdote].text,
       votes: anecdotes[selectedAnecdote].votes + 1,
-    }),
-      setAnecdotes(copy);
+    };
+    setAnecdotes(copy);
   };
+
+  const highestVoteAnecdote = anecdotes.reduce(
+    (prev, cur) => (prev.votes > cur.votes ? prev : cur),
+    0,
+  );
 
   return (
     <>
@@ -58,6 +63,15 @@ const Anecdotes = () => {
       <p>Has {anecdotes[selectedAnecdote].votes} votes</p>
       <button onClick={upvote}>Vote</button>
       <button onClick={getNewAnecdote}>Next anecdote</button>
+      {highestVoteAnecdote.votes > 0 ? (
+        <>
+          <h2>Anecdote with the most votes:</h2>
+          <p>{highestVoteAnecdote.text}</p>
+          <p>Has {highestVoteAnecdote.votes} votes</p>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   );
 };
