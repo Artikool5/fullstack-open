@@ -23,12 +23,8 @@ function Content({ parts }) {
 }
 
 function Total({ parts }) {
-  return (
-    <p>
-      Number of excercises{" "}
-      {parts[0].excercises + parts[1].excercises + parts[2].excercises}
-    </p>
-  );
+  const total = parts.reduce((acc, cur) => acc + cur.excercises, 0);
+  return <p>Number of excercises {total} </p>;
 }
 
 function Course({ course }) {
