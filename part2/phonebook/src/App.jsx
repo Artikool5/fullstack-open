@@ -6,12 +6,16 @@ function App() {
   ]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
+  const [filteredName, setFilteredName] = useState("");
 
   const handleNewName = (e) => {
     setNewName(e.target.value);
   };
   const handleNewPhoneNumber = (e) => {
     setNewPhoneNumber(e.target.value);
+  };
+  const handleFilteredName = (e) => {
+    setFilteredName(e.target.value);
   };
 
   const addPerson = (e) => {
@@ -37,7 +41,13 @@ function App() {
 
   return (
     <>
-      <h2>Phonebook</h2>
+      <h1>Phonebook</h1>
+      <div>
+        Filter shown with{" "}
+        <input type="text" value={filteredName} onChange={handleFilteredName} />
+      </div>
+
+      <h2>Add new entry</h2>
       <form>
         <div>
           Name:{" "}
@@ -65,13 +75,17 @@ function App() {
       </form>
       <h2>Numbers</h2>
       <div>
-        {people.map((person) => {
-          return (
-            <p key={person.id}>
-              {person.name} {person.number}
-            </p>
-          );
-        })}
+        {people
+          .filter((person) =>
+            person.name.toLowerCase().includes(filteredName.toLowerCase()),
+          )
+          .map((person) => {
+            return (
+              <p key={person.id}>
+                {person.name} {person.number}
+              </p>
+            );
+          })}
       </div>
     </>
   );
