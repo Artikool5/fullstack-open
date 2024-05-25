@@ -1,13 +1,13 @@
-const Person = ({ name, number, id, handleDelete }) => {
+const Person = ({ name, number, id, deletePerson }) => {
   return (
     <p>
       {name} {number}
-      <button onClick={() => handleDelete(id, name)}>Delete</button>
+      <button onClick={() => deletePerson(id, name)}>Delete</button>
     </p>
   );
 };
 
-const People = ({ people, filteredName, handleDelete }) => {
+const People = ({ people, filteredName, deletePerson }) => {
   const filteredPeople = people.filter((person) =>
     person.name.toLowerCase().includes(filteredName.toLowerCase()),
   );
@@ -20,7 +20,7 @@ const People = ({ people, filteredName, handleDelete }) => {
             number={person.number}
             key={person.id}
             id={person.id}
-            handleDelete={handleDelete}
+            deletePerson={deletePerson}
           />
         );
       })}

@@ -27,11 +27,30 @@ function App() {
   const addPerson = (e) => {
     e.preventDefault();
 
-    const personExists = people.some(
+    const existingPerson = people.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase(),
     );
-    if (personExists) {
-      alert(`${newName} is already added to the Phonebook`);
+    if (existingPerson) {
+      const isConfirmed = confirm(`${newName} is already added to the Phonebook
+        Replace old number with a new one?`);
+      if (!isConfirmed) return;
+
+      const personObject = {
+        id: existingPerson.id,
+        name: existingPerson.name,
+        number: newPhoneNumber.trim(),
+      };
+      peopleService
+        .update(existingPerson.id, personObject)
+        .then((returnedPerson) => {
+          const newPeople = people.map((person) => {
+            return person.id === returnedPerson.id ? returnedPerson : person;
+          });
+
+          setPeople(newPeople);
+          setNewName("");
+          setNewPhoneNumber("");
+        });
       return;
     }
 
@@ -48,7 +67,7 @@ function App() {
     });
   };
 
-  const handleDelete = (id, name) => {
+  const deletePerson = (id, name) => {
     const isConfirmed = confirm(`Are you really want to delete ${name}?`);
     if (isConfirmed) {
       peopleService.remove(id).then((returnedPerson) => {
@@ -80,7 +99,7 @@ function App() {
       <People
         people={people}
         filteredName={filteredName}
-        handleDelete={handleDelete}
+        deletePerson={deletePerson}
       />
     </>
   );
