@@ -36,7 +36,7 @@ function App() {
     }
 
     const personObject = {
-      id: Date.now(),
+      id: Date.now().toString(),
       name: newName.trim(),
       number: newPhoneNumber.trim(),
     };
@@ -46,6 +46,18 @@ function App() {
       setNewName("");
       setNewPhoneNumber("");
     });
+  };
+
+  const handleDelete = (id, name) => {
+    const isConfirmed = confirm(`Are you really want to delete ${name}?`);
+    if (isConfirmed) {
+      peopleService.remove(id).then((returnedPerson) => {
+        const newPeople = people.filter(
+          (person) => person.id !== returnedPerson.id,
+        );
+        setPeople(newPeople);
+      });
+    }
   };
 
   return (
@@ -65,7 +77,11 @@ function App() {
         addPerson={addPerson}
       />
       <h2>Numbers</h2>
-      <People people={people} filteredName={filteredName} />
+      <People
+        people={people}
+        filteredName={filteredName}
+        handleDelete={handleDelete}
+      />
     </>
   );
 }
