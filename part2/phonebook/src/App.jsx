@@ -2,19 +2,13 @@ import { useEffect, useState } from "react";
 import Filter from "./Filter";
 import Form from "./Form";
 import People from "./People";
-import axios from "axios";
+import peopleService from "./serveces/people";
 
 function App() {
   const [people, setPeople] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [filteredName, setFilteredName] = useState("");
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3001/phones")
-      .then((response) => setPeople(response.data));
-  }, []);
 
   const handleNewName = (e) => {
     setNewName(e.target.value);
@@ -25,6 +19,10 @@ function App() {
   const handleFilteredName = (e) => {
     setFilteredName(e.target.value);
   };
+
+  useEffect(() => {
+    peopleService.getAll().then((initialPeople) => setPeople(initialPeople));
+  }, []);
 
   const addPerson = (e) => {
     e.preventDefault();
@@ -42,9 +40,12 @@ function App() {
       name: newName.trim(),
       number: newPhoneNumber.trim(),
     };
-    setPeople(people.concat(personObject));
-    setNewName("");
-    setNewPhoneNumber("");
+
+    peopleService.create(personObject).then((returnedNote) => {
+      setPeople(people.concat(returnedNote));
+      setNewName("");
+      setNewPhoneNumber("");
+    });
   };
 
   return (
