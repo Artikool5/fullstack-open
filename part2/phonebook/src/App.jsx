@@ -10,19 +10,37 @@ function App() {
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [filteredName, setFilteredName] = useState("");
 
-  const handleNewName = (e) => {
-    setNewName(e.target.value);
-  };
-  const handleNewPhoneNumber = (e) => {
-    setNewPhoneNumber(e.target.value);
-  };
-  const handleFilteredName = (e) => {
-    setFilteredName(e.target.value);
-  };
+  const handleNewName = (e) => setNewName(e.target.value);
+  const handleNewPhoneNumber = (e) => setNewPhoneNumber(e.target.value);
+  const handleFilteredName = (e) => setFilteredName(e.target.value);
 
   useEffect(() => {
     peopleService.getAll().then((initialPeople) => setPeople(initialPeople));
   }, []);
+
+  const updatePerson = (existingPerson) => {
+    const isConfirmed = confirm(`${newName} is already added to the Phonebook
+        Replace old number with a new one?`);
+    if (!isConfirmed) return;
+
+    const personObject = {
+      id: existingPerson.id,
+      name: existingPerson.name,
+      number: newPhoneNumber.trim(),
+    };
+    peopleService
+      .update(existingPerson.id, personObject)
+      .then((returnedPerson) => {
+        const newPeople = people.map((person) => {
+          return person.id === returnedPerson.id ? returnedPerson : person;
+        });
+
+        setPeople(newPeople);
+        setNewName("");
+        setNewPhoneNumber("");
+      });
+    return;
+  };
 
   const addPerson = (e) => {
     e.preventDefault();
@@ -31,26 +49,7 @@ function App() {
       (person) => person.name.toLowerCase() === newName.toLowerCase(),
     );
     if (existingPerson) {
-      const isConfirmed = confirm(`${newName} is already added to the Phonebook
-        Replace old number with a new one?`);
-      if (!isConfirmed) return;
-
-      const personObject = {
-        id: existingPerson.id,
-        name: existingPerson.name,
-        number: newPhoneNumber.trim(),
-      };
-      peopleService
-        .update(existingPerson.id, personObject)
-        .then((returnedPerson) => {
-          const newPeople = people.map((person) => {
-            return person.id === returnedPerson.id ? returnedPerson : person;
-          });
-
-          setPeople(newPeople);
-          setNewName("");
-          setNewPhoneNumber("");
-        });
+      updatePerson(existingPerson);
       return;
     }
 
@@ -60,8 +59,8 @@ function App() {
       number: newPhoneNumber.trim(),
     };
 
-    peopleService.create(personObject).then((returnedNote) => {
-      setPeople(people.concat(returnedNote));
+    peopleService.create(personObject).then((returnedPerson) => {
+      setPeople(people.concat(returnedPerson));
       setNewName("");
       setNewPhoneNumber("");
     });
