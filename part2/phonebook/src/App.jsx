@@ -66,6 +66,15 @@ function App() {
           type: "update",
         });
         setTimeout(() => setMessage(null), 5000);
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          setMessage({
+            content: "This person has been deleted on the server",
+            type: "error",
+          });
+          setTimeout(() => setMessage(null), 5000);
+        }
       });
     return;
   };
@@ -87,32 +96,54 @@ function App() {
       number: newPhoneNumber.trim(),
     };
 
-    peopleService.create(personObject).then((returnedPerson) => {
-      setPeople(people.concat(returnedPerson));
-      setNewName("");
-      setNewPhoneNumber("");
-      setMessage({
-        content: `${returnedPerson.name} has been added`,
-        type: "update",
+    peopleService
+      .create(personObject)
+      .then((returnedPerson) => {
+        setPeople(people.concat(returnedPerson));
+        setNewName("");
+        setNewPhoneNumber("");
+        setMessage({
+          content: `${returnedPerson.name} has been added`,
+          type: "update",
+        });
+        setTimeout(() => setMessage(null), 5000);
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          setMessage({
+            content: "This person has been deleted on the server",
+            type: "error",
+          });
+          setTimeout(() => setMessage(null), 5000);
+        }
       });
-      setTimeout(() => setMessage(null), 5000);
-    });
   };
 
   const deletePerson = (id, name) => {
     const isConfirmed = confirm(`Are you really want to delete ${name}?`);
     if (isConfirmed) {
-      peopleService.remove(id).then((returnedPerson) => {
-        setMessage({
-          content: `${returnedPerson.name} has been deleted`,
-          type: "update",
+      peopleService
+        .remove(id)
+        .then((returnedPerson) => {
+          setMessage({
+            content: `${returnedPerson.name} has been deleted`,
+            type: "update",
+          });
+          const newPeople = people.filter(
+            (person) => person.id !== returnedPerson.id,
+          );
+          setPeople(newPeople);
+          setTimeout(() => setMessage(null), 5000);
+        })
+        .catch((err) => {
+          if (err.response.status === 404) {
+            setMessage({
+              content: "This person has been deleted on the server",
+              type: "error",
+            });
+            setTimeout(() => setMessage(null), 5000);
+          }
         });
-        const newPeople = people.filter(
-          (person) => person.id !== returnedPerson.id,
-        );
-        setPeople(newPeople);
-        setTimeout(() => setMessage(null), 5000);
-      });
     }
   };
 
