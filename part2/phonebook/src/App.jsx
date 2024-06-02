@@ -4,11 +4,34 @@ import Form from "./Form";
 import People from "./People";
 import peopleService from "./serveces/people";
 
+const Notification = ({ message, type }) => {
+  let style = {
+    padding: "1rem 2rem",
+    marginBottom: "1rem",
+    width: "fit-content",
+    fontSize: "1.5rem",
+    backgroundColor: "#dddddd",
+  };
+  switch (type) {
+    case "error":
+      style = { ...style, color: "red", border: "3px solid red" };
+      break;
+    case "update":
+      style = { ...style, color: "green", border: "3px solid green" };
+      break;
+
+    default:
+      throw new Error("Wrong message type");
+  }
+  return <div style={style}>{message}</div>;
+};
+
 function App() {
   const [people, setPeople] = useState([]);
   const [newName, setNewName] = useState("");
   const [newPhoneNumber, setNewPhoneNumber] = useState("");
   const [filteredName, setFilteredName] = useState("");
+  const [message, setMessage] = useState(null);
 
   const handleNewName = (e) => setNewName(e.target.value);
   const handleNewPhoneNumber = (e) => setNewPhoneNumber(e.target.value);
@@ -38,6 +61,11 @@ function App() {
         setPeople(newPeople);
         setNewName("");
         setNewPhoneNumber("");
+        setMessage({
+          content: `${returnedPerson.name}'s phone has been updated`,
+          type: "update",
+        });
+        setTimeout(() => setMessage(null), 5000);
       });
     return;
   };
@@ -63,6 +91,11 @@ function App() {
       setPeople(people.concat(returnedPerson));
       setNewName("");
       setNewPhoneNumber("");
+      setMessage({
+        content: `${returnedPerson.name} has been added`,
+        type: "update",
+      });
+      setTimeout(() => setMessage(null), 5000);
     });
   };
 
@@ -70,10 +103,15 @@ function App() {
     const isConfirmed = confirm(`Are you really want to delete ${name}?`);
     if (isConfirmed) {
       peopleService.remove(id).then((returnedPerson) => {
+        setMessage({
+          content: `${returnedPerson.name} has been deleted`,
+          type: "update",
+        });
         const newPeople = people.filter(
           (person) => person.id !== returnedPerson.id,
         );
         setPeople(newPeople);
+        setTimeout(() => setMessage(null), 5000);
       });
     }
   };
@@ -81,6 +119,9 @@ function App() {
   return (
     <>
       <h1>Phonebook</h1>
+      {!message ? null : (
+        <Notification message={message.content} type={message.type} />
+      )}
       <Filter
         filteredName={filteredName}
         handleFilteredName={handleFilteredName}
