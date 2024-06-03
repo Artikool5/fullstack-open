@@ -1,6 +1,6 @@
 export function CountryInfo({ country }) {
   return (
-    <div>
+    <div style={{ padding: "1rem" }}>
       <h1>{country.name.common}</h1>
       <h2>{country.name.official}</h2>
       <p>Capital: {country.capital}</p>

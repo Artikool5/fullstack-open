@@ -18,20 +18,28 @@ export function CountriesList({ filteredCountries }) {
     <div>
       {filteredCountries.map((country) => {
         return (
-          <>
-            <p key={country.ccn3}>
+          <details
+            onToggle={() => handleOpenedCountries(country.ccn3)}
+            key={country.ccn3}
+            style={{
+              border: "1px solid black",
+              width: "24rem",
+            }}
+          >
+            <summary
+              style={{
+                border: "2px solid black",
+                cursor: "pointer",
+                background: "lightgray",
+                padding: "0.2rem 1rem",
+              }}
+            >
               {country.name.common}
-              <button
-                onClick={() => handleOpenedCountries(country.ccn3)}
-                type="button"
-              >
-                Show
-              </button>
-            </p>
+            </summary>
             {openedCountries.includes(country.ccn3) ? (
               <CountryInfo country={country} />
             ) : null}
-          </>
+          </details>
         );
       })}
     </div>
