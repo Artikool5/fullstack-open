@@ -1,35 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-function CountriesRender({ filteredCountries }) {
-  const numberOfCountries = filteredCountries.length;
-  const country = filteredCountries[0];
-  return numberOfCountries === 0 ? (
-    <></>
-  ) : numberOfCountries > 10 ? (
-    <p>Too many matches</p>
-  ) : numberOfCountries > 1 ? (
-    <div>
-      {filteredCountries.map((country) => {
-        return <p key={country.ccn3}>{country.name.common}</p>;
-      })}
-    </div>
-  ) : (
-    <div>
-      <h1>{country.name.common}</h1>
-      <h2>{country.name.official}</h2>
-      <p>Capital: {country.capital}</p>
-      <p>Area: {country.area}</p>
-      <p>Languages:</p>
-      <ul>
-        {Object.values(country.languages).map((lang, i) => {
-          return <li key={i}>{lang}</li>;
-        })}
-      </ul>
-      <img src={country.flags.png} alt={country.flags.alt} />
-    </div>
-  );
-}
+import { CountriesRender } from "./CountriesRender";
 
 console.log("key", import.meta.env.VITE_WEATHER_KEY);
 function App() {
