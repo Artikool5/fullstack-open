@@ -70,3 +70,18 @@ sequenceDiagram
 
     Note right of browser: The browser executes the callback function that renders the notes
 ```
+
+## Exercise 0.6
+
+In SPA we don't get anything back from server after the POST request. The notes are updated locally
+
+```mermaid
+sequenceDiagram
+  participant browser
+  participant server
+
+  browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+  loop UpdateLocalNotes
+    browser->>browser: Append new note to the list of notes
+  end
+```
