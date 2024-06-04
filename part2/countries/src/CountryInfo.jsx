@@ -1,3 +1,5 @@
+import WeatherInfo from "./WeatherInfo";
+
 export function CountryInfo({ country }) {
   return (
     <div style={{ padding: "1rem" }}>
@@ -13,6 +15,7 @@ export function CountryInfo({ country }) {
         })}
       </ul>
       <img src={country.flags.png} alt={country.flags.alt} />
+      <WeatherInfo latlon={country.capitalInfo.latlng} />
     </div>
   );
 }

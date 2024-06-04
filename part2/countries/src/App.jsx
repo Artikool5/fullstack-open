@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { CountriesRender } from "./CountriesRender";
 
-console.log("key", import.meta.env.VITE_WEATHER_KEY);
 function App() {
   const [country, setCountry] = useState("");
   const [countries, setCountries] = useState([]);
